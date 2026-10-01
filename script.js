@@ -1501,9 +1501,12 @@
   function resolveLink(keys) { for (let i = 0; i < keys.length; i++) { const v = getLink(keys[i]); if (v) return v; } return ''; }
 
   const STORE_ITEMS = [
-    { title: 'Placas INDY', text: 'Identificá a tu mascota y ayudala a volver a casa.', cta: 'VER / PEDIR', keys: ['placas', 'tienda'], ic: 'tag', art: 1 },
-    { title: 'Accesorios', text: 'Collares, correas y accesorios para acompañarla todos los días.', cta: 'VER PRODUCTOS', keys: ['accesorios', 'productos', 'tienda'], ic: 'collar', art: 2 },
-    { title: 'Juguetes', text: 'Porque también cuidar es jugar.', cta: 'VER', keys: ['juguetes', 'productos', 'tienda'], ic: 'ball', art: 3 }
+    { title: 'Placas INDY', text: 'Identificá a tu mascota y ayudala a volver a casa.', 
+         cta: 'VER / PEDIR', keys: ['placas', 'tienda'], ic: 'tag', art: 1 },
+    { title: 'Aprende a hacer jabones naturales', text: 'En esta master class aprende a elaborar jabones naturales para tu mascota..', 
+         cta: 'VER PRODUCTOS', keys: ['accesorios', 'productos', 'tienda'], ic: 'collar', art: 2 },
+    { title: 'Juguetes', text: 'Porque también cuidar es jugar.', 
+         cta: 'VER', keys: ['juguetes', 'productos', 'tienda'], ic: 'ball', art: 3 }
   ];
   function linkButton(href, label, cls, ic) {
     return href
