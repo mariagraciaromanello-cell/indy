@@ -50,7 +50,7 @@
     whatsapp: '',
     tienda: '',
     instagram: '',
-    placas: '',
+    placas: 'https://go.hotmart.com/E107531961F?dp=1',
     accesorios: 'https://go.hotmart.com/V107847023K?dp=1',
     juguetes: '',
     productos: ''
@@ -1501,7 +1501,7 @@
   function resolveLink(keys) { for (let i = 0; i < keys.length; i++) { const v = getLink(keys[i]); if (v) return v; } return ''; }
 
   const STORE_ITEMS = [
-    { title: 'Placas INDY', text: 'Identificá a tu mascota y ayudala a volver a casa.', 
+    { title: 'Mascotas Sanas', text: 'Con el masterclass MASCOTAS SANAS Aprenderás las bases de la nutrición natural casera de perros y gatos.', 
          cta: 'VER / PEDIR', keys: ['placas', 'tienda'], ic: 'tag', art: 1 },
     { title: 'Aprende a hacer jabones naturales', text: 'En esta master class aprende a elaborar jabones naturales para tu mascota..', 
          cta: 'VER PRODUCTOS', keys: ['accesorios', 'productos', 'tienda'], ic: 'collar', art: 2 },
