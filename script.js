@@ -51,7 +51,7 @@
     tienda: '',
     instagram: '',
     placas: '',
-    accesorios: '',
+    accesorios: 'https://go.hotmart.com/V107847023K?dp=1',
     juguetes: '',
     productos: ''
   };
