@@ -39,7 +39,7 @@
   /* ===========================================================
      CONFIGURACION DE ENLACES
      -----------------------------------------------------------
-     Cambiá los enlaces acá (o desde la app: Más > Enlaces de INDY).
+     Cambiá los enlaces acá, en este archivo.
      Si un enlace queda vacío (""), su botón se desactiva.
      - whatsapp: número con código de país (ej. "5491122334455") o enlace https://wa.me/...
      - instagram: usuario (ej. "@indy") o URL completa
@@ -50,19 +50,10 @@
     whatsapp: '',
     tienda: '',
     instagram: '',
-    placas: 'https://go.hotmart.com/E107531961F?dp=1',
-    accesorios: 'https://go.hotmart.com/V107847023K?dp=1',
+    placas: '',
+    accesorios: '',
     juguetes: '',
     productos: ''
-  };
-  const LINK_LABELS = {
-    whatsapp: 'WhatsApp de INDY',
-    tienda: 'Tienda',
-    instagram: 'Instagram',
-    placas: 'Placas INDY',
-    accesorios: 'Accesorios',
-    juguetes: 'Juguetes',
-    productos: 'Otros productos'
   };
 
   // Opciones generales
@@ -220,44 +211,6 @@
     return Math.round(n / 1024);
   }
 
-  function exportBackup() {
-    const data = { app: 'INDY', version: BRAND.version, exportedAt: new Date().toISOString(),
-      pet: state.pet, reminders: state.reminders, history: state.history, moments: state.moments, settings: state.settings };
-    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    downloadBlob(blob, 'indy-copia-' + todayISO() + '.json');
-    toast('Copia de seguridad descargada ❤️');
-  }
-
-  function importBackup(file) {
-    const fr = new FileReader();
-    fr.onload = function () {
-      let o;
-      try { o = JSON.parse(fr.result); } catch (e) { o = null; }
-      if (!o || o.app !== 'INDY' || !Array.isArray(o.reminders) || !Array.isArray(o.history) || !Array.isArray(o.moments)) {
-        toast('Ese archivo no es una copia de seguridad de INDY.', 'error'); return;
-      }
-      confirmDialog({ title: 'Restaurar copia', message: 'Se va a reemplazar todo lo que hay ahora en este dispositivo por el contenido de la copia. ¿Continuamos?', ok: 'RESTAURAR', danger: true }).then(function (yes) {
-        if (!yes) return;
-        const d = defaultSettings(); const s = o.settings || {};
-        const settings = Object.assign({}, d, s, { contact: Object.assign({}, d.contact, s.contact || {}), publicFields: Object.assign({}, d.publicFields, s.publicFields || {}), lost: Object.assign({}, d.lost, s.lost || {}), links: s.links || {} });
-        const ok = commit('pet', o.pet && o.pet.name ? Object.assign({ weights: [] }, o.pet) : null) &&
-          commit('reminders', o.reminders) && commit('history', o.history) && commit('moments', o.moments) && commit('settings', settings);
-        if (!ok) return;
-        applyTextSize(); toast('Copia restaurada ❤️'); navigate('home');
-      });
-    };
-    fr.onerror = function () { toast('No pude leer el archivo.', 'error'); };
-    fr.readAsText(file);
-  }
-
-  function resetAll() {
-    Object.keys(KEYS).forEach(function (k) { store.removeItem(KEYS[k]); });
-    state.pet = null; state.reminders = []; state.history = []; state.moments = [];
-    state.settings = defaultSettings();
-    state.ui = { petTab: 'profile', idTab: 'card' };
-    applyTextSize();
-  }
-
   /* ===========================================================
      4. NAVEGACIÓN
      =========================================================== */
@@ -270,15 +223,13 @@
     moments: { title: 'Momentos', tab: 'more', parent: 'more' },
     store: { title: 'Tienda INDY', tab: 'more', parent: 'more' },
     owner: { title: 'Mi información', tab: 'more', parent: 'more' },
-   /*   settings: { title: 'Configuración', tab: 'more', parent: 'more' },
-    links: { title: 'Enlaces de INDY', tab: 'more', parent: 'more' },*/
     help: { title: 'Ayuda', tab: 'more', parent: 'more' },
     about: { title: 'Acerca de INDY', tab: 'more', parent: 'more' }
   };
   const RENDERERS = {
     home: renderHome, pet: renderPet, reminders: renderReminders, identity: renderIdentity, more: renderMore,
-    moments: renderMoments, store: renderStore, owner: renderOwner, settings: renderSettings,
-    links: renderLinks, help: renderHelp, about: renderAbout
+    moments: renderMoments, store: renderStore, owner: renderOwner,
+    help: renderHelp, about: renderAbout
   };
   const ACTIONS = {};   // acciones de botones (data-action)
   const FORMS = {};     // envío de formularios (data-form)
@@ -1501,12 +1452,9 @@
   function resolveLink(keys) { for (let i = 0; i < keys.length; i++) { const v = getLink(keys[i]); if (v) return v; } return ''; }
 
   const STORE_ITEMS = [
-    { title: 'Mascotas Sanas', text: 'Con el masterclass MASCOTAS SANAS Aprenderás las bases de la nutrición natural casera de perros y gatos.', 
-         cta: 'VER / PEDIR', keys: ['placas', 'tienda'], ic: 'tag', art: 1 },
-    { title: 'Aprende a hacer jabones naturales', text: 'En esta master class aprende a elaborar jabones naturales para tu mascota..', 
-         cta: 'VER PRODUCTOS', keys: ['accesorios', 'productos', 'tienda'], ic: 'collar', art: 2 },
-    { title: 'Juguetes', text: 'Porque también cuidar es jugar.', 
-         cta: 'VER', keys: ['juguetes', 'productos', 'tienda'], ic: 'ball', art: 3 }
+    { title: 'Placas INDY', text: 'Identificá a tu mascota y ayudala a volver a casa.', cta: 'VER / PEDIR', keys: ['placas', 'tienda'], ic: 'tag', art: 1 },
+    { title: 'Accesorios', text: 'Collares, correas y accesorios para acompañarla todos los días.', cta: 'VER PRODUCTOS', keys: ['accesorios', 'productos', 'tienda'], ic: 'collar', art: 2 },
+    { title: 'Juguetes', text: 'Porque también cuidar es jugar.', cta: 'VER', keys: ['juguetes', 'productos', 'tienda'], ic: 'ball', art: 3 }
   ];
   function linkButton(href, label, cls, ic) {
     return href
@@ -1524,17 +1472,14 @@
       h += '<div class="card"><h3>¿Tenés dudas?</h3><div class="btn-row">' + (wa ? '<a class="btn btn-soft" href="' + esc(wa) + '" target="_blank" rel="noopener">' + icon('whatsapp') + 'ESCRIBIR POR WHATSAPP</a>' : '') +
         (ig ? '<a class="btn btn-soft" href="' + esc(ig) + '" target="_blank" rel="noopener">' + icon('instagram') + 'VER INSTAGRAM</a>' : '') + '</div></div>';
     }
-    if (!STORE_ITEMS.some(function (it) { return resolveLink(it.keys); })) {
-      h += '<div class="banner">' + icon('info') + '<div class="banner-body"><span>Los botones se activan cuando cargás los enlaces de la tienda.</span><button type="button" class="btn btn-sm btn-primary" data-action="go" data-screen="links">CONFIGURAR ENLACES</button></div></div>';
-    }
     return h + '</div>';
   }
 
   function renderMore() {
     const rows = [
       ['heart', 'Momentos', 'Tus recuerdos más lindos', 'moments'], ['store', 'Tienda INDY', 'Placas, accesorios y juguetes', 'store'],
-      ['user', 'Mi información', 'Tu nombre y datos de contacto', 'owner'], ['settings', 'Configuración', 'Texto, copia de seguridad y datos', 'settings'],
-      ['link', 'Enlaces de INDY', 'WhatsApp, tienda e Instagram', 'links'], ['help', 'Ayuda', 'Preguntas frecuentes', 'help'], ['info', 'Acerca de INDY', 'Versión y propósito', 'about']
+      ['user', 'Mi información', 'Tu nombre y datos de contacto', 'owner'],
+      ['help', 'Ayuda', 'Preguntas frecuentes', 'help'], ['info', 'Acerca de INDY', 'Versión y propósito', 'about']
     ];
     return '<div class="screen-inner"><div class="page-head"><h1>Más</h1></div><div class="list">' + rows.map(function (r) {
       return '<button type="button" class="row" data-action="go" data-screen="' + r[3] + '"><span class="row-ico">' + icon(r[0]) + '</span><span class="row-text"><strong>' + r[1] + '</strong><small>' + r[2] + '</small></span>' + icon('chevron') + '</button>';
@@ -1552,63 +1497,6 @@
       '<p class="hint">' + (storageOK ? 'Tus datos se guardan solo en este navegador y este dispositivo.' : 'Tu navegador bloquea el almacenamiento: los datos se perderán al cerrar.') + '</p></div></div>';
   }
 
-  function renderSettings() {
-    return '<div class="screen-inner"><h1 class="sr-only">Configuración</h1>' +
-      '<div class="card"><h3>Lectura</h3><label class="switch-row"><span class="switch-text"><strong>Texto más grande</strong><small>Agranda las letras de toda la app</small></span>' +
-      '<span class="switch-state">' + (state.settings.largeText ? 'Activado' : 'Desactivado') + '</span><input type="checkbox" role="switch" data-change="large-text"' + (state.settings.largeText ? ' checked' : '') + '><span class="switch-ui" aria-hidden="true"></span></label></div>' +
-      '<div class="card"><h3>Copia de seguridad</h3><p class="muted">Descargá todos tus datos en un archivo, o restaurá una copia anterior.</p>' +
-      '<div class="btn-row"><button type="button" class="btn btn-primary" data-action="backup-export">' + icon('download') + 'EXPORTAR COPIA</button>' +
-      '<button type="button" class="btn btn-soft" data-action="backup-import">' + icon('upload') + 'IMPORTAR COPIA</button></div>' +
-      '<input type="file" accept="application/json,.json" hidden id="import-file" data-change="import-file"></div>' +
-      '<div class="card"><h3>Borrar todo</h3><p class="muted">Elimina la mascota y todos los datos guardados en este dispositivo.</p>' +
-      '<button type="button" class="btn btn-danger btn-block" data-action="reset-all">' + icon('trash') + 'BORRAR TODOS LOS DATOS</button></div></div>';
-  }
-  CHANGES['large-text'] = function (el) {
-    if (commit('settings', Object.assign({}, state.settings, { largeText: el.checked }))) { applyTextSize(); refresh(); const n = $('[data-change="large-text"]'); if (n) n.focus({ preventScroll: true }); }
-  };
-  ACTIONS['backup-export'] = function () { exportBackup(); };
-  ACTIONS['backup-import'] = function () { $('#import-file').click(); };
-  CHANGES['import-file'] = function (el) { const f = el.files && el.files[0]; if (f) importBackup(f); el.value = ''; };
-  ACTIONS['reset-all'] = function () {
-    confirmDialog({ title: 'Borrar todos los datos', message: 'Se va a borrar todo lo guardado en INDY en este dispositivo. No se puede deshacer. Si querés conservarlo, primero exportá una copia.', ok: 'BORRAR TODO', danger: true }).then(function (yes) {
-      if (!yes) return;
-      resetAll(); toast('Se borraron todos los datos.'); navigate('home');
-    });
-  };
-
-  function renderLinks() {
-    const wa = getLink('whatsapp'), ig = getLink('instagram'), st = getLink('tienda');
-    let h = '<div class="screen-inner"><h1 class="sr-only">Enlaces de INDY</h1>';
-    if (wa || ig || st) {
-      h += '<div class="card"><h3>Encontrá a INDY</h3><div class="btn-row">' + (wa ? '<a class="btn btn-soft" href="' + esc(wa) + '" target="_blank" rel="noopener">' + icon('whatsapp') + 'WHATSAPP</a>' : '') +
-        (ig ? '<a class="btn btn-soft" href="' + esc(ig) + '" target="_blank" rel="noopener">' + icon('instagram') + 'INSTAGRAM</a>' : '') +
-        (st ? '<a class="btn btn-soft" href="' + esc(st) + '" target="_blank" rel="noopener">' + icon('store') + 'TIENDA</a>' : '') + '</div></div>';
-    }
-    h += '<form class="card form" data-form="links" novalidate><h3>Editar enlaces</h3><p class="muted">Estos enlaces activan los botones de la Tienda INDY. Dejá un campo vacío para desactivar su botón.</p>' +
-      Object.keys(LINKS).map(function (k) {
-        const o = state.settings.links, raw = Object.prototype.hasOwnProperty.call(o, k) ? o[k] : LINKS[k];
-        return fieldHTML({ name: k, label: LINK_LABELS[k], value: raw, type: 'text', placeholder: k === 'whatsapp' ? '5491112345678' : k === 'instagram' ? '@tuusuario' : 'https://…', attrs: 'inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="false"' });
-      }).join('') +
-      '<button type="submit" class="btn btn-primary btn-lg btn-block">GUARDAR ENLACES</button>' +
-      '<button type="button" class="btn btn-ghost btn-block" data-action="links-reset">RESTAURAR ENLACES ORIGINALES</button>' +
-      '<p class="hint">Los enlaces originales se definen en script.js, en la sección CONFIGURACION DE ENLACES.</p></form></div>';
-    return h;
-  }
-  FORMS.links = function (f) {
-    clearErrors(f);
-    const overrides = {}; let ok = true;
-    Object.keys(LINKS).forEach(function (k) {
-      const raw = String(f.elements[k].value || '').trim(), norm = normalizeLink(k, raw);
-      if (raw && !norm) { setError(f, k, 'Revisá este enlace: tiene que ser una dirección válida.'); ok = false; return; }
-      if (norm !== normalizeLink(k, LINKS[k])) overrides[k] = norm;
-    });
-    if (!ok) { focusFirstError(f); return; }
-    if (commit('settings', Object.assign({}, state.settings, { links: overrides }))) { saved(); refresh(); }
-  };
-  ACTIONS['links-reset'] = function () {
-    if (commit('settings', Object.assign({}, state.settings, { links: {} }))) { toast('Enlaces restaurados.'); refresh(); }
-  };
-
   function renderHelp() {
     const qa = [
       ['¿Cómo creo el perfil de mi mascota?', 'En Inicio tocá “Crear mi mascota”. Completá al menos el nombre; el resto lo podés editar cuando quieras desde Mascota > Editar datos.'],
@@ -1616,7 +1504,7 @@
       ['¿Cómo veo la evolución del peso?', 'En Mascota > Peso registrá mediciones. Con dos o más aparece la gráfica.'],
       ['¿Para qué sirve el QR?', 'Podés imprimirlo en una placa, collar o tarjeta. Quien lo escanee verá solo los datos que marcaste como públicos.'],
       ['¿Qué pasa si mi mascota se pierde?', 'En Identidad > Perdida activá el modo emergencia. Después descargá un QR nuevo para que muestre la alerta, y cuando vuelva tocá “Ya volvió a casa”.'],
-      ['¿Dónde se guardan mis datos?', 'Solo en este navegador, en este dispositivo. No hay cuentas ni servidores. Si cambiás de teléfono, usá Configuración > Exportar copia.'],
+      ['¿Dónde se guardan mis datos?', 'Solo en este navegador, en este dispositivo. No hay cuentas ni servidores. '],
       ['¿Puedo usar INDY sin internet?', 'Sí. Una vez abierta, INDY funciona sin conexión. Solo los enlaces de la tienda necesitan internet.']
     ];
     return '<div class="screen-inner"><h1 class="sr-only">Ayuda</h1><div class="list">' + qa.map(function (x) {
