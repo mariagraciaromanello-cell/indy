@@ -270,8 +270,8 @@
     moments: { title: 'Momentos', tab: 'more', parent: 'more' },
     store: { title: 'Tienda INDY', tab: 'more', parent: 'more' },
     owner: { title: 'Mi información', tab: 'more', parent: 'more' },
-    settings: { title: 'Configuración', tab: 'more', parent: 'more' },
-    links: { title: 'Enlaces de INDY', tab: 'more', parent: 'more' },
+   /*   settings: { title: 'Configuración', tab: 'more', parent: 'more' },
+    links: { title: 'Enlaces de INDY', tab: 'more', parent: 'more' },*/
     help: { title: 'Ayuda', tab: 'more', parent: 'more' },
     about: { title: 'Acerca de INDY', tab: 'more', parent: 'more' }
   };
