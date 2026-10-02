@@ -47,14 +47,16 @@
      - accesorios / juguetes: si están vacíos usan "productos", y luego "tienda".
      =========================================================== */
   const LINKS = {
-    whatsapp: '',
+    whatsapp: '5493804158990',
     tienda: '',
     instagram: '',
-    placas: '',
-    accesorios: '',
-    juguetes: '',
-    productos: ''
-  };
+    // Placas INDY: abre WhatsApp con el mensaje ya escrito
+    placas: 'https://wa.me/5493804158990?text=' + encodeURIComponent('¡Hola! Quiero pedir una placa INDY para mi mascota. ¿Me pasan información para encargarla?'),
+    // Master class de Hotmart
+    curso1: 'https://go.hotmart.com/G107846950W?dp=1',   // Pastelería Canina y Felina
+    curso2: 'https://go.hotmart.com/E107531961F?dp=1',   // Mascotas Sanas
+    curso3: 'https://go.hotmart.com/V107847023K?dp=1'    // Jabones para Mascotas
+  ;
 
   // Opciones generales
   const CONFIG = {
@@ -1452,9 +1454,10 @@
   function resolveLink(keys) { for (let i = 0; i < keys.length; i++) { const v = getLink(keys[i]); if (v) return v; } return ''; }
 
   const STORE_ITEMS = [
-    { title: 'Placas INDY', text: 'Identificá a tu mascota y ayudala a volver a casa.', cta: 'VER / PEDIR', keys: ['placas', 'tienda'], ic: 'tag', art: 1 },
-    { title: 'Accesorios', text: 'Collares, correas y accesorios para acompañarla todos los días.', cta: 'VER PRODUCTOS', keys: ['accesorios', 'productos', 'tienda'], ic: 'collar', art: 2 },
-    { title: 'Juguetes', text: 'Porque también cuidar es jugar.', cta: 'VER', keys: ['juguetes', 'productos', 'tienda'], ic: 'ball', art: 3 }
+    { title: 'Placas INDY', text: 'Identificá a tu mascota y ayudala a volver a casa. Artesanía hecha en impresora 3D: pedila por WhatsApp.', cta: 'PEDIR POR WHATSAPP', keys: ['placas'], ic: 'tag', art: 1 },
+    { title: 'Pastelería Canina y Felina', text: 'Master class: aprendé a preparar tortas y golosinas caseras para tu mascota.', cta: 'VER MASTER CLASS', keys: ['curso1'], ic: 'bowl', art: 2 },
+    { title: 'Mascotas Sanas', text: 'Master class: cuidados y hábitos para que tu mascota viva bien y feliz.', cta: 'VER MASTER CLASS', keys: ['curso2'], ic: 'heart', art: 3 },
+    { title: 'Jabones para Mascotas', text: 'Master class: elaborá jabones naturales para el baño de tu mascota.', cta: 'VER MASTER CLASS', keys: ['curso3'], ic: 'drop', art: 2 }
   ];
   function linkButton(href, label, cls, ic) {
     return href
